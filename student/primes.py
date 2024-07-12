@@ -1,3 +1,5 @@
+import math
+
 def write_primes(n, path):
     '''
     Write primes under n to a specified file.
@@ -6,16 +8,26 @@ def write_primes(n, path):
     :return: None
     '''
     # Delete the contents of the file if it already exists
-    open(path, 'w').close()
-    prime=[]
+    primes = []
+    # Create a boolean array to mark numbers as prime or not
+    is_prime = [True] * (n + 1)
+    is_prime[0] = is_prime[1] = False
+
     # Loop over all the possible prime numbers
+    for i in range(2, int(math.sqrt(n)) + 1):
+        if is_prime[i]:
+            # If the number is prime, mark all its multiples as non-prime
+            for j in range(i * i, n + 1, i):
+                is_prime[j] = False
+
+    # Add the prime numbers to the list
     for i in range(2, n + 1):
-        # Check if the number is prime
-        if is_prime(i):
-            #If it is prime, write it to the file
-            prime.append(i)
-    with open(path, 'a') as file:
-        file.write('\n'.join(map(str, prime)) + '\n')
+        if is_prime[i]:
+            primes.append(str(i))
+
+    # Write the list of primes to the file
+    with open(path, 'w') as file:
+        file.write('\n'.join(primes))
 
 
 def is_prime(n):
@@ -28,9 +40,17 @@ def is_prime(n):
     # 0, 1, and negative numbers are not prime
     if n < 2:
         return False
-    
-    # Consider all numbers from 2 to the square root of n
-    for i in range(2, int(n ** 0.5) + 1):
+
+    # 2 is the only even prime number
+    if n == 2:
+        return True
+
+    # Even numbers greater than 2 are not prime
+    if n % 2 == 0:
+        return False
+
+    # Consider odd numbers from 3 to the square root of n
+    for i in range(3, int(n ** 0.5) + 1, 2):
         # If a factor is found, the number is not prime
         if n % i == 0:
             return False
