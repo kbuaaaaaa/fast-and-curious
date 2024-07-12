@@ -47,7 +47,6 @@ def largest_triangle_area(n, radius, h=0.0):
     """
     h = largest_triangle_proof(n, radius)
     # The largest triangle is an equilateral triangle
-    largest_A = float('-inf')
     step = radius / n
     d = np.arange(0, radius, step)
     area = 0.5 * (2 * np.sqrt(radius**2 - d**2)) * (d + h)
