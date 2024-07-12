@@ -7,14 +7,16 @@ def write_primes(n, path):
     '''
     # Delete the contents of the file if it already exists
     open(path, 'w').close()
-
+    prime=[]
     # Loop over all the possible prime numbers
     for i in range(2, n + 1):
         # Check if the number is prime
         if is_prime(i):
             #If it is prime, write it to the file
-            with open(path, 'a') as file:
-                file.write(str(i) + '\n')
+            prime.append(i)
+    with open(path, 'a') as file:
+        file.write('\n'.join(map(str, prime)) + '\n')
+
 
 def is_prime(n):
     '''
