@@ -24,6 +24,7 @@ def largest_triangle_proof(n, radius):
     #The lower this value the higher quality the circle is with more points generated
     stepSize = 180/n
 
+    #Generated vertices
     base_length = 2 * radius
     t_values = np.radians(np.arange(0.0, 180.0, stepSize))
     positions = np.array([(radius * np.cos(t_values) + origin_x, radius * np.sin(t_values) + origin_y)])
@@ -48,13 +49,7 @@ def largest_triangle_area(n, radius, h=0.0):
     # The largest triangle is an equilateral triangle
     largest_A = float('-inf')
     step = radius / n
-    
-    for d in np.arange(0, radius, step):
-        base_length = 2 * math.sqrt(radius**2 - d**2)
-        area = 0.5 * base_length * (d + h)
-        if d == 0:
-            largest_A=area
-        elif area>=largest_A:
-            largest_A=area
-    return largest_A
+    d = np.arange(0, radius, step)
+    area = 0.5 * (2 * np.sqrt(radius**2 - d**2)) * (d + h)
+    return max(area)
 
