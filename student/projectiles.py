@@ -1,5 +1,7 @@
 import math
 import matplotlib.pyplot as plt
+import numpy as np
+
 
 def find_launch_angle(mass, velocity, distance, drag_coefficient, cross_section_area):
     '''
@@ -15,9 +17,7 @@ def find_launch_angle(mass, velocity, distance, drag_coefficient, cross_section_
 
     # Calculate all the angles to check
     # Every 0.1 degrees from 0 to 45 
-    angles = []
-    for i in range(451):
-        angles.append(i * 0.1)
+    angles = np.arange(0, 45.1, 0.1)
 
     # Loop over all possible launch angles
     for angle in angles:
@@ -50,8 +50,8 @@ def calculate_distance(mass, velocity, angle, drag_coefficient, cross_section_ar
     y = 0
 
     # Initialise the x and y velocities
-    v_x = velocity * math.cos(math.radians(angle))
-    v_y = velocity * math.sin(math.radians(angle))
+    v_x = velocity * np.cos(np.radians(angle))
+    v_y = velocity * np.sin(np.radians(angle))
 
     # Loop until the projectile hits the ground
     # Each step represents a time interval of dt seconds
