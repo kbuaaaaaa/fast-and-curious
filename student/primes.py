@@ -1,6 +1,8 @@
 import math
+from numba import jit
 
-def write_primes(n, path):
+@jit(nopython=True)
+def get_primes(n):
     '''
     Write primes under n to a specified file.
     :param n: int, The number to write primes under.
@@ -24,12 +26,16 @@ def write_primes(n, path):
     for i in range(2, n + 1):
         if is_prime[i]:
             primes.append(str(i))
+    return primes
 
+def write_primes(n, path):
     # Write the list of primes to the file
+    primes = get_primes(n)
     with open(path, 'w') as file:
         file.write('\n'.join(primes))
 
 
+@jit(nopython=True)
 def is_prime(n):
     '''
     Check if a number is prime.
