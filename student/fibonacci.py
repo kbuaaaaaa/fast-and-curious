@@ -1,4 +1,7 @@
-def fibonacci(n, memo={}):
+from numba import njit
+
+@njit
+def fibonacci(n, memo=None):
     """
     Calculate the nth Fibonacci number using dynamic programming.
 
@@ -23,10 +26,13 @@ def fibonacci(n, memo={}):
     >>> fibonacci(9)
     34
     """
-    if n <= 1:
-        return n
-
-    if n not in memo:
-        memo[n] = fibonacci(n - 1, memo) + fibonacci(n - 2, memo)
-
+    if memo is None:
+        memo = [0, 1]
+    
+    if n < len(memo):
+        return memo[n]
+    
+    while len(memo) <= n:
+        memo.append(memo[-2] + memo[-1])
+    
     return memo[n]
