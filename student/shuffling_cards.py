@@ -1,3 +1,4 @@
+import numpy as np
 def create_numbered_deck(n):
     """
     Helper function to create a deck of cards numbered from 0 to n-1.
@@ -8,7 +9,7 @@ def create_numbered_deck(n):
     Returns:
     - list: List of integers representing the numbered deck.
     """
-    return [i for i in range(n)]
+    return np.arange(n)
 
 def cut(deck, n):
     """
@@ -21,17 +22,8 @@ def cut(deck, n):
     Returns:
     - list: List representing the deck after performing the cut operation.
     """
-    new_deck = []
-
-    # Add the elements from position n to the end
-    for i in range(n, len(deck)):
-        new_deck.append(deck[i])
-
-    # Add the elements from the start to position n-1
-    for i in range(n):
-        new_deck.append(deck[i])
     
-    return new_deck
+    return np.concatenate((deck[n:], deck[:n]), axis=0)
 
 def deal(deck):
     """
@@ -43,13 +35,9 @@ def deal(deck):
     Returns:
     - list: List representing the deck after performing the deal operation.
     """
-    new_deck = []
 
-    # Add elements in reverse order (end of deck, to zero, step of -1)
-    for i in range(len(deck) - 1, 0, -1):
-        new_deck.append(deck[i])
 
-    return new_deck
+    return np.flip(deck)
 
 def faro_shuffle(deck):
     """
@@ -60,22 +48,24 @@ def faro_shuffle(deck):
     perfectly, starting with the top card of the original deck. 
 
     Args:
-    - deck (list): List representing the deck of cards.
+    - deck (list or np.ndarray): List or NumPy array representing the deck of cards.
 
     Returns:
-    - list: List representing the deck after performing the Faro shuffle.
+    - np.ndarray: NumPy array representing the deck after performing the Faro shuffle.
     """
     size = len(deck)
-    new_deck = [None] * size
-    position = 0
+    half = size // 2
 
-    for i in range(size):
-        # Find the next available position
-        while new_deck[position] is not None:
-            position = (position + 1) % size
-        
-        new_deck[position] = deck[i]
-        position = (position + 2) % size  # Move to the next interleaved position
+    # Split the deck into two halves
+    first_half = deck[:half]
+    second_half = deck[half:]
+
+    # Create an empty array for the shuffled deck
+    new_deck = np.empty(size, int)
+
+    # Interleave the two halves
+    new_deck[0::2] = first_half
+    new_deck[1::2] = second_half
 
     return new_deck
 
@@ -102,6 +92,4 @@ def find_card_position(deck_size, instructions, card):
         elif instruction.startswith("shuffle"):
             deck = faro_shuffle(deck)
 
-    for position, _card in enumerate(deck):
-        if _card == card:
-            return position
+    return np.where(deck == card)[0][0]
